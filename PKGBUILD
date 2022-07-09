@@ -1,4 +1,4 @@
-_deb='https://github.com/xanmod/linux/releases/download/5.18.8-xanmod1/linux-image-5.18.8-xanmod1-x64v2_5.18.8-xanmod1-x64v2-0.git20220630.68a54d9_amd64.deb'
+_deb='https://github.com/xanmod/linux/releases/download/5.18.10-xanmod1/linux-image-5.18.10-xanmod1-x64v2_5.18.10-xanmod1-x64v2-0.git20220708.997a16a_amd64.deb'
 _modules=('drivers/gpu/drm/i915/i915.ko')
 pkgname=linux-xanmod-edge-bin
 pkgbase=linux-xanmod-edge-bin
@@ -36,10 +36,10 @@ prepare() {
 
   pushd linux-$_major
 
-  patch -Np1 -i ../patch-$_kpatch
+  patch -Np1 -i "../patch-$_kpatch"
 
   local _patch
-  for _patch in $BUILDDIR/*.patch
+  for _patch in "$BUILDDIR/"*.patch
   do
     if [ -f "$_patch" ]
     then
@@ -49,7 +49,7 @@ prepare() {
 
   scripts/setlocalversion --save-scmversion
 
-  cp -vf CONFIGS/xanmod/${_compiler}/${_config} .config
+  cp -vf "CONFIGS/xanmod/${_compiler}/${_config}" .config
 
   scripts/config --enable CONFIG_STACK_VALIDATION --enable CONFIG_IKCONFIG --enable CONFIG_IKCONFIG_PROC
 
@@ -62,7 +62,7 @@ prepare() {
   local _module
   for _module in "${_modules[@]}"
   do
-    make -C . M=${_module%/*}/
+    make -C . M="${_module%/*}/"
   done
 
   popd
